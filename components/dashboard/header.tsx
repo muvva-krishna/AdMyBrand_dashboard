@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { RefreshCw, TrendingUp, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
@@ -11,20 +12,39 @@ interface HeaderProps {
   lastRefresh?: Date;
 }
 
-export function Header({ onRefresh, isRefreshing, lastRefresh }: HeaderProps) {
-  const formatLastRefresh = (date?: Date) => {
-    if (!date) return 'Never';
-    const now = new Date();
-    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    if (diff < 60) return `${diff}s ago`;
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-    return date.toLocaleTimeString();
+export function Header({ onRefresh, isRefreshing }: HeaderProps) {
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [secondsAgo, setSecondsAgo] = useState(0);
+
+  const formatLastRefresh = () => {
+    if (!lastUpdated) return 'Never';
+    if (secondsAgo < 60) return `${secondsAgo}s ago`;
+    if (secondsAgo < 3600) return `${Math.floor(secondsAgo / 60)}m ago`;
+    return lastUpdated.toLocaleTimeString();
   };
 
   const handleRefresh = () => {
+    setLastUpdated(new Date());
+    setSecondsAgo(0);
     onRefresh();
   };
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (lastUpdated) {
+        setSecondsAgo(Math.floor((Date.now() - lastUpdated.getTime()) / 1000));
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [lastUpdated]);
+
+  useEffect(() => {
+    // On mount (auto-refresh), start timer
+    const initialDate = new Date();
+    setLastUpdated(initialDate);
+    setSecondsAgo(0);
+  }, []);
+
   return (
     <motion.header 
       initial={{ opacity: 0, y: -20 }}
@@ -60,7 +80,7 @@ export function Header({ onRefresh, isRefreshing, lastRefresh }: HeaderProps) {
           >
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <Clock className="h-4 w-4" />
-              <span>Last updated: {formatLastRefresh(lastRefresh)}</span>
+              <span>Last updated: {formatLastRefresh()}</span>
             </div>
             <Button
               onClick={handleRefresh}
