@@ -1,3 +1,13 @@
+
+export type MarketInsight = {
+  summary: string;
+  topPerformers: string[];
+  marketTrend: 'bullish' | 'bearish' | 'neutral';
+  recommendations: string[];
+  riskLevel: 'low' | 'medium' | 'high';
+};
+
+
 export async function generateMarketInsights(coins: any[]) {
   try {
     const response = await fetch('/.netlify/functions/market-insights', {
