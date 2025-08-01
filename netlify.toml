@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
   publish = ".next"
-  functions = "netlify/functions"  # ✅ Add this line to point to your functions folder
+  functions = "netlify/functions"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -11,7 +11,7 @@
   port = 3000
 
 [[redirects]]
-  from = "/api/*"                # ✅ Ensure API routes work correctly (optional)
+  from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
