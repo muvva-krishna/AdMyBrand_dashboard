@@ -9,7 +9,6 @@ import { motion } from "framer-motion"
 interface HeaderProps {
   onRefresh: () => void;
   isRefreshing: boolean;
-  lastRefresh?: Date;
 }
 
 export function Header({ onRefresh, isRefreshing }: HeaderProps) {
@@ -24,7 +23,8 @@ export function Header({ onRefresh, isRefreshing }: HeaderProps) {
   };
 
   const handleRefresh = () => {
-    setLastUpdated(new Date());
+    const now = new Date();
+    setLastUpdated(now);
     setSecondsAgo(0);
     onRefresh();
   };
@@ -32,18 +32,21 @@ export function Header({ onRefresh, isRefreshing }: HeaderProps) {
   useEffect(() => {
     const timer = setInterval(() => {
       if (lastUpdated) {
-        setSecondsAgo(Math.floor((Date.now() - lastUpdated.getTime()) / 1000));
+        const diff = Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
+        setSecondsAgo(diff);
       }
     }, 1000);
     return () => clearInterval(timer);
   }, [lastUpdated]);
 
   useEffect(() => {
-    // On mount (auto-refresh), start timer
+    // On mount, assume initial auto-refresh
     const initialDate = new Date();
     setLastUpdated(initialDate);
     setSecondsAgo(0);
   }, []);
+
+  const isCooldown = secondsAgo < 60;
 
   return (
     <motion.header 
@@ -84,13 +87,13 @@ export function Header({ onRefresh, isRefreshing }: HeaderProps) {
             </div>
             <Button
               onClick={handleRefresh}
-              disabled={isRefreshing}
+              disabled={isRefreshing || isCooldown}
               variant="outline"
               size="sm"
               className="transition-all duration-200 hover:scale-105"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-              Refresh Data
+              {isCooldown ? `Refresh in ${60 - secondsAgo}s` : "Refresh Data"}
             </Button>
             <ThemeToggle />
           </motion.div>
