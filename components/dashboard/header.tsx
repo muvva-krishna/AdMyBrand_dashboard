@@ -9,6 +9,7 @@ import { motion } from "framer-motion"
 interface HeaderProps {
   onRefresh: () => void;
   isRefreshing: boolean;
+  lastRefresh: Date; // ✅ Add this line
 }
 
 export function Header({ onRefresh, isRefreshing }: HeaderProps) {
