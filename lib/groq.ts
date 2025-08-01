@@ -1,4 +1,4 @@
-export async function generateMarketInsights(coins: any[]): Promise<MarketInsight> {
+export async function generateMarketInsights(coins: any[]) {
   try {
     const response = await fetch('/.netlify/functions/market-insights', {
       method: 'POST',
@@ -6,10 +6,9 @@ export async function generateMarketInsights(coins: any[]): Promise<MarketInsigh
       body: JSON.stringify({ coins }),
     });
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error calling Netlify function:', error);
+    console.error('Fallback used due to error:', error);
     return {
       summary: "Market analysis temporarily unavailable. Please try refreshing the data.",
       topPerformers: ["Bitcoin", "Ethereum", "BNB"],
