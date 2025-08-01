@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "SKIP_ENV_VALIDATION=true next build || exit 1",
     "start": "next start",
     "lint": "next lint"
   },
@@ -74,8 +74,4 @@
     "eslint": "^8.57.1",
     "prettier": "^3.6.2"
   }
-  "scripts": {
-  "build": "SKIP_ENV_VALIDATION=true next build || exit 1"
-}
-
 }
