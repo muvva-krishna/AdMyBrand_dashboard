@@ -34,7 +34,7 @@ ${JSON.stringify(marketData, null, 2)}
 
 Your JSON must strictly follow this structure:
 {
-  "summary": "2-3 sentence summary",
+  "summary": "Brief 2–3 sentence summary of the 24h market performance using change values.",
   "topPerformers": ["Coin1", "Coin2", "Coin3"],
   "marketTrend": "bullish" | "bearish" | "neutral",
   "recommendations": ["Rec1", "Rec2", "Rec3"],
