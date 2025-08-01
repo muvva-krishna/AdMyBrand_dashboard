@@ -36,7 +36,7 @@ Your JSON must strictly follow this structure:
     const response = await fetch(GROQ_API_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer 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`,
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
