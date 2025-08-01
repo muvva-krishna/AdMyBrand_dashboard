@@ -1,5 +1,7 @@
 # AdmyBrand Insights - AI-Powered Analytics Dashboard
 
+https://muvva-krishna.netlify.app/ (link to the web app)
+
 This is a modern analytics dashboard for digital marketing agencies, providing real-time cryptocurrency market data and AI-powered insights.
 
 ## Features
